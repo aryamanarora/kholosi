@@ -133,8 +133,8 @@ input {
       <h1>Kholosi Dictionary</h1>
       <p>This is live-generated from a Google Sheet that I am probably editing as you view this, so if it breaks (and it probably will) let me know! Also, check out the very <a href="/kholosi/vowels">preliminary analysis of vowels in Kholosi</a>.</p>
       <p class="text-muted">Note: I tried to be as narrow as possible in IPA transcription. <strong>Tone is probably not phonemic</strong> in Kholosi; it is most likely a realization of stress. Falling pitch in the <em>phonetic IPA</em> is a high-to-low tone. The acute accent in the <em>phonemic transliteration</em> is my guess at where stress is (generally at a falling or high-before-falling tone).</p>
-      <hr>
       <p class="load">Loading...</p>
+      <hr>
       <div class="card-columns"></div>
       <script>
           var shortcuts = [
@@ -148,7 +148,7 @@ input {
               ['Az.', 'Azerbaijani']
           ]
           d3.csv("https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk/export?gid=0&format=csv&id=1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk").then(function(data) {
-              d3.select(".load").remove()
+              d3.select(".load").text(data.length + " lemmata.")
               console.log(data)
               var add = d3.select(".card-columns")
               for (var i = 0; i < data.length; i++) {
