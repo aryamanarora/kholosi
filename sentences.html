@@ -17,6 +17,11 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/versor"></script><!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-52207113-1"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="//unpkg.com/leipzig/dist/leipzig.min.css">
+
+<!-- JavaScript -->
+<script src="//unpkg.com/leipzig/dist/leipzig.min.js"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -130,51 +135,30 @@ input {
 </head>
 <body>
   <div class="container mt-5 mb-5">
-      <h1>Kholosi Dictionary</h1>
-      <p>This is live-generated from a Google Sheet that I am probably editing as you view this, so if it breaks (and it probably will) let me know! Also, check out the very <a href="/kholosi/vowels">preliminary analysis of vowels in Kholosi</a>.</p>
-      <p class="text-muted">Note: I tried to be as narrow as possible in IPA transcription. <strong>Tone is probably not phonemic</strong> in Kholosi; it is most likely a realization of stress. Falling pitch in the <em>phonetic IPA</em> is a high-to-low tone. The acute accent in the <em>phonemic transliteration</em> is my guess at where stress is (generally at a falling or high-before-falling tone).</p>
-      <p>Also see <a href="/kholosi/sentences">sentences</a>.</p>
+      <h1>Kholosi Sentences</h1>
       <p class="load">Loading...</p>
       <hr>
       <div class="card-columns"></div>
       <script>
-          var shortcuts = [
-              ['Skt.', 'Sanskrit'],
-              ['Trk.', 'Turkish'],
-              ['Prs.', 'Persian'],
-              ['Sd.', 'Sindhi'],
-              ['Pa.', 'Punjabi'],
-              ['Dom.', 'Domari'],
-              ['Rom.', 'Romani'],
-              ['Az.', 'Azerbaijani']
-          ]
-          d3.csv("https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk/export?gid=0&format=csv&id=1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk").then(function(data) {
-              d3.select(".load").text(data.length + " lemmata.")
+          d3.csv("https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk/export?gid=750016672&format=csv&id=1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk").then(function(data) {
               console.log(data)
-              var add = d3.select(".card-columns")
+              d3.select(".load").text(data.length + " sentences.")
               for (var i = 0; i < data.length; i++) {
-                    var d = data[i]
-                    shortcuts.forEach(e => {
-                        d.Etymology = d.Etymology.replace(e[0], `<abbr title="${e[1]}">${e[0]}</abbr>`)
-                        d.Cognates = d.Cognates.replace(e[0], `<abbr title="${e[1]}">${e[0]}</abbr>`)
-                    })
-                    var card = add.append("div")
-                        .attr("class", "card")
-                        .append("div")
-                        .attr("class", "card-body")
-
-                    card.append("h4")
-                        .attr("class", "card-title")
-                        .style("font-weight", "bold")
-                        .text(d.Transcription)
-                    card.append("p")
-                        .attr("class", "card-text")
-                        .html(`[${d['Phonetic IPA'].replace(', ', '], [')}]<br>
-                        <em>${d['Part of Speech']} ${d.Form ? "(" + d.Form + ")" : ""}</em><br>"${d.Meaning}"<br>
-                        <span class="text-muted small"><em>Etymology</em>: ${d.Etymology ? d.Etymology : ""}${d.Cognates ? ": cf. " + d.Cognates : ""}<br>
-                        <em>References</em>: ${d.Citations ? d.Citations : ""}<br>
-                        <em>Notes</em>: ${d.Notes ? d.Notes : ""}</span>`)
+                var d = data[i]
+                var s = d3.select(".card-columns")
+                    .append("div")
+                    .attr("class", "card")
+                    .append("div")
+                    .attr("class", "card-body")
+                    .append("div")
+                    .attr("class", "card-text")
+                    .attr("data-gloss", 1)
+                s.append("p").text(d.Transcription)
+                if (d['Phonetic IPA']) {s.append("p").text(d['Phonetic IPA'])}
+                s.append("p").text(d.Gloss)
+                s.append("p").text(d.Meaning)
               }
+              $(function() { Leipzig().gloss(); });
           })
       </script>
   </div>
