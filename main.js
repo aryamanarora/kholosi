@@ -19,7 +19,7 @@ svg.append("g")
     .call(d3.axisTop(x));
 
 var y = d3.scaleLinear()
-    .domain([1000, 100])
+    .domain([1100, 200])
     .range([height, 0]);
 svg.append("g")
     .attr("transform", `translate(${width}, 0)`)
@@ -29,22 +29,22 @@ var t = d3.transition()
     .duration(750)
 
 vowels = [
-    ['i', 240, 2400],
-    ['y', 235, 2100],
-    ['e', 390, 2300],
-    ['ø', 370, 1900],
-    ['ɛ', 610, 1900],
-    ['œ', 585, 1710],
-    ['a', 850, 1610],
-    ['ɶ', 820, 1530],
-    ['ɑ', 750, 940],
-    ['ɒ', 700, 760],
-    ['ʌ', 600, 1170],
-    ['ɔ', 500, 700],
-    ['ɤ', 460, 1310],
-    ['o', 360, 640],
-    ['ɯ', 300, 1390],
-    ['u', 250, 595]
+    // ['i', 240, 2400],
+    // ['y', 235, 2100],
+    // ['e', 390, 2300],
+    // ['ø', 370, 1900],
+    // ['ɛ', 610, 1900],
+    // ['œ', 585, 1710],
+    // ['a', 850, 1610],
+    // ['ɶ', 820, 1530],
+    // ['ɑ', 750, 940],
+    // ['ɒ', 700, 760],
+    // ['ʌ', 600, 1170],
+    // ['ɔ', 500, 700],
+    // ['ɤ', 460, 1310],
+    // ['o', 360, 640],
+    // ['ɯ', 300, 1390],
+    // ['u', 250, 595]
 ]
 
 vowels.forEach(d => {
@@ -96,80 +96,147 @@ d3.tsv("data.txt").then(function(data) {
         var style = word.replace(/_(.*?)_/g, '<span style="color: blue">$1</span>')
         var vowel = word.match(/_.*?_/g)[0]
         // if (vowel != '_a_' && vowel != '_o_') return
-        var sum_f1 = 0, sum_f2 = 0;
-        elem.data.forEach((d, i) => {
-            sum_f1 += parseFloat(d.F1_Hz)
-            sum_f2 += parseFloat(d.F2_Hz)
-            g.append("circle")
-                .attr("class", "data-" + word)
-                .attr("data-time", d.Time_s - elem.data[0].Time_s)
-                .attr("cx", x(d.F2_Hz))
-                .attr("cy", y(d.F1_Hz))
-                .attr("r", 3)
-                .attr("fill", stringToColour(vowel))
-                .attr("opacity", 0.1)
-            if (i != 0) {
-                g.append("line")
-                    .attr("class", "data-" + word)
+        function mouseover() {
+            var last = null
+            elem.data.forEach((d, i) => {
+                g.append("circle")
+                    .attr("class", "trace data-" + word)
                     .attr("data-time", d.Time_s - elem.data[0].Time_s)
-                    .attr("x1", x(last.F2_Hz))
-                    .attr("y1", y(last.F1_Hz))
-                    .attr("x2", x(d.F2_Hz))
-                    .attr("y2", y(d.F1_Hz))
-                    .attr("stroke-width", 0.5)
-                    .attr("stroke", stringToColour(vowel))
+                    .attr("cx", x(d.F2_Hz))
+                    .attr("cy", y(d.F1_Hz))
+                    .attr("r", 3)
+                    .attr("fill", stringToColour(vowel))
                     .attr("opacity", 0.1)
-            }
-            last = d
-        })
+                if (i != 0) {
+                    g.append("line")
+                        .attr("class", "trace data-" + word)
+                        .attr("data-time", d.Time_s - elem.data[0].Time_s)
+                        .attr("x1", x(last.F2_Hz))
+                        .attr("y1", y(last.F1_Hz))
+                        .attr("x2", x(d.F2_Hz))
+                        .attr("y2", y(d.F1_Hz))
+                        .attr("stroke-width", 0.5)
+                        .attr("stroke", stringToColour(vowel))
+                        .attr("opacity", 0.1)
+                }
+                last = d
+            })
+            d3.select("h1").html(style + ' (' + Math.round(len * 1000) + ' ms)')
+            d3.selectAll("circle").style("opacity", 0.1)
+            d3.selectAll("line").style("opacity", 0.1)
+            d3.selectAll(".data-" + word).style("opacity", 1)
+            var margin = {top: 10, right: 10, bottom: 50, left: 50},
+                width = 260 - margin.left - margin.right,
+                height = 200 - margin.top - margin.bottom;
+            var svg2 = d3.select("div")
+                .append("svg")
+                .attr("class", "graph")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                    .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")")
+            var x2 = d3.scaleLinear()
+                .domain([0, len])
+                .range([ 0, width ])
+            var y2 = d3.scaleLinear()
+                .domain([0, 5000])
+                .range([height, 0])
+            svg2.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x2))
+                .selectAll("text")
+                    .attr("y", 0)
+                    .attr("x", 9)
+                    .attr("dy", ".35em")
+                    .attr("transform", "rotate(90)")
+                    .style("text-anchor", "start");
+            svg2.append("g")
+                .call(d3.axisLeft(y2))
+
+            elem.data.forEach(d => {
+                svg2.append("circle")
+                    .attr("cx", x2(d.Time_s - elem.data[0].Time_s))
+                    .attr("cy", y2(d.F1_Hz))
+                    .attr("r", 1.5)
+                    .style("fill", stringToColour("F1"))
+                svg2.append("circle")
+                    .attr("cx", x2(d.Time_s - elem.data[0].Time_s))
+                    .attr("cy", y2(d.F2_Hz))
+                    .attr("r", 1.5)
+                    .style("fill", stringToColour("F2"))
+                svg2.append("circle")
+                    .attr("cx", x2(d.Time_s - elem.data[0].Time_s))
+                    .attr("cy", y2(d.F3_Hz))
+                    .attr("r", 1.5)
+                    .style("fill", stringToColour("F3"))
+                svg2.append("circle")
+                    .attr("cx", x2(d.Time_s - elem.data[0].Time_s))
+                    .attr("cy", y2(d.F4_Hz))
+                    .attr("r", 1.5)
+                    .style("fill", stringToColour("F4"))})
+        }
+        function mouseout() {
+            d3.select("div")
+                .style("opacity", 0)
+            d3.selectAll("*").style("opacity", null)
+            d3.selectAll(".graph, .trace")
+                .remove()
+            d3.select("h1").html("")
+        }
         if (vowel.length != 3) {
+            return
             g2.append("circle")
                 .attr("class", "data-" + word)
                 .attr("cx", x(elem.data[elem.data.length - 1].F2_Hz))
                 .attr("cy", y(elem.data[elem.data.length - 1].F1_Hz))
                 .attr("r", 10 * Math.sqrt(len / 0.2))
+                // .attr("r", 5)
                 .attr("fill", stringToColour(vowel))
                 .attr("stroke", "black")
                 .attr("stroke-width", 1)
+                .attr("opacity", 0.8)
+                .on("mouseover", mouseover)
+                .on("mouseout", mouseout)
             g2.append("circle")
                 .attr("class", "data-" + word)
                 .attr("cx", x(elem.data[0].F2_Hz))
                 .attr("cy", y(elem.data[0].F1_Hz))
                 .attr("r", 10 * Math.sqrt(len / 0.2))
+                // .attr("r", 5)
                 .attr("fill", stringToColour(vowel))
                 .attr("stroke", "black")
                 .attr("stroke-width", 1)
+                .attr("opacity", 0.8)
+                .on("mouseover", mouseover)
+                .on("mouseout", mouseout)
             g.append("line")
                 .attr("class", "data-" + word)
                 .attr("x1", x(elem.data[0].F2_Hz))
                 .attr("y1", y(elem.data[0].F1_Hz))
                 .attr("x2", x(elem.data[elem.data.length - 1].F2_Hz))
                 .attr("y2", y(elem.data[elem.data.length - 1].F1_Hz))
-                .attr("stroke-width", 5)
+                .attr("stroke-width", 1)
                 .attr("stroke", stringToColour(vowel))
+                .attr("opacity", 0.8)
         }
         else {
             g2.append("circle")
                 .attr("class", "data-" + word)
-                .attr("cx", x(sum_f2 / elem.data.length))
-                .attr("cy", y(sum_f1 / elem.data.length))
-                .attr("r", 10 * Math.sqrt(len / 0.2))
+                .attr("cx", x(elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
+                .attr("cy", y(elem.data[Math.floor(elem.data.length / 2)].F1_Hz))
+                .attr("r", 10 * Math.sqrt(len / 0.1))
+                // .attr("r", 5)
                 .attr("fill", stringToColour(vowel))
                 .attr("stroke", "black")
                 .attr("stroke-width", 1)
-            console.log(vowel, word, sum_f1 / elem.data.length, sum_f2 / elem.data.length, len)
+                .attr("opacity", 0.7)
+                .on("mouseover", mouseover)
+                .on("mouseout", mouseout)
         }
-        svg.selectAll(".data-" + word)
-            .on("mouseover", d => {
-                d3.select("h1").html(style + ' (' + Math.round(len * 1000) + ' ms)')
-                d3.selectAll("circle").style("opacity", 0.1)
-                d3.selectAll("line").style("opacity", 0.1)
-                d3.selectAll(".data-" + word).style("opacity", 1)
-            })
-            .on("mouseout", d => {
-                d3.selectAll("*").style("opacity", null)
-                d3.select("h1").html("")
-            })
     })
 
+    svg.call(d3.zoom()
+    .scaleExtent([0.5, 32])
+    .on("zoom", zoomed)).call(zoom.transform, d3.zoomIdentity)
 })
