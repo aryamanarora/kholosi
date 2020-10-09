@@ -13,13 +13,16 @@ var svg = container.append("svg")
         "translate(" + margin.left + "," + margin.top + ")")
 
 var x = d3.scaleLinear()
-    .domain([3000, 300])
+    .domain([2800, 400])
     .range([0, width]);
+// var x = d3.scaleLinear()
+//     .domain([3600, 2000])
+//     .range([0, width]);
 svg.append("g")
     .call(d3.axisTop(x));
 
 var y = d3.scaleLinear()
-    .domain([1100, 200])
+    .domain([1000, 250])
     .range([height, 0]);
 svg.append("g")
     .attr("transform", `translate(${width}, 0)`)
@@ -93,8 +96,10 @@ d3.tsv("data.txt").then(function(data) {
     res.forEach((elem, i) => {
         var len = elem.data[elem.data.length - 1].Time_s - elem.data[0].Time_s
         var word = elem.env
+        var old_word = word
         var style = word.replace(/_(.*?)_/g, '<span style="color: blue">$1</span>')
         var vowel = word.match(/_.*?_/g)[0]
+        word = word.replace(/_(.*?)_/g, '$1')
         // if (vowel != '_a_' && vowel != '_o_') return
         function mouseover() {
             var last = null
@@ -167,7 +172,7 @@ d3.tsv("data.txt").then(function(data) {
                     .style("fill", stringToColour("F2"))
                 svg2.append("circle")
                     .attr("cx", x2(d.Time_s - elem.data[0].Time_s))
-                    .attr("cy", y2(d.F3_Hz))
+                    .attr("cy", y2(d.F2_Hz))
                     .attr("r", 1.5)
                     .style("fill", stringToColour("F3"))
                 svg2.append("circle")
@@ -225,7 +230,7 @@ d3.tsv("data.txt").then(function(data) {
                 .attr("class", "data-" + word)
                 .attr("cx", x(elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
                 .attr("cy", y(elem.data[Math.floor(elem.data.length / 2)].F1_Hz))
-                .attr("r", 10 * Math.sqrt(len / 0.1))
+                .attr("r", 10 * Math.sqrt(len / 0.2))
                 // .attr("r", 5)
                 .attr("fill", stringToColour(vowel))
                 .attr("stroke", "black")
@@ -233,10 +238,11 @@ d3.tsv("data.txt").then(function(data) {
                 .attr("opacity", 0.7)
                 .on("mouseover", mouseover)
                 .on("mouseout", mouseout)
+            // g2.append("text")
+            //     .html(old_word)
+            //     .attr("x", x(elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
+            //     .attr("y", y(elem.data[Math.floor(elem.data.length / 2)].F1_Hz))
+            //     .attr("text-anchor", "middle")
         }
     })
-
-    svg.call(d3.zoom()
-    .scaleExtent([0.5, 32])
-    .on("zoom", zoomed)).call(zoom.transform, d3.zoomIdentity)
 })
