@@ -79,6 +79,7 @@ var stringToColour = function(str) {
 }
 
 d3.tsv("data.txt").then(function(data) {
+    var sums = {}, counts = {}
     var g = svg.append("g")
     var g2 = svg.append("g")
     var res = []
@@ -99,6 +100,10 @@ d3.tsv("data.txt").then(function(data) {
         var old_word = word
         var style = word.replace(/_(.*?)_/g, '<span style="color: blue">$1</span>')
         var vowel = word.match(/_.*?_/g)[0]
+        if (!counts[vowel]) counts[vowel] = 0, sums[vowel] = [0, 0]
+        counts[vowel]++
+        sums[vowel][0] += +elem.data[Math.floor(elem.data.length / 2)].F1_Hz
+        sums[vowel][1] += +elem.data[Math.floor(elem.data.length / 2)].F2_Hz
         word = word.replace(/_(.*?)_/g, '$1')
         // if (vowel != '_a_' && vowel != '_o_') return
         function mouseover() {
@@ -245,4 +250,14 @@ d3.tsv("data.txt").then(function(data) {
             //     .attr("text-anchor", "middle")
         }
     })
+    for (const vowel in sums) {
+        if (vowel.length != 3) continue
+        console.log(sums[vowel], counts[vowel])
+        g2.append("text")
+            .attr("x", x(sums[vowel][1] / counts[vowel]))
+            .attr("y", y(sums[vowel][0] / counts[vowel]))
+            .text("/" + vowel.slice(1, vowel.length - 1) + "/")
+            .attr("font-size", 30)
+            .style("pointer-events", "none")
+    }
 })
