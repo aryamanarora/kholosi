@@ -177,7 +177,7 @@ d3.tsv("data.txt").then(function(data) {
                     .style("fill", stringToColour("F2"))
                 svg2.append("circle")
                     .attr("cx", x2(d.Time_s - elem.data[0].Time_s))
-                    .attr("cy", y2(d.F2_Hz))
+                    .attr("cy", y2(d.F3_Hz))
                     .attr("r", 1.5)
                     .style("fill", stringToColour("F3"))
                 svg2.append("circle")
