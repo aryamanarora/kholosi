@@ -132,11 +132,24 @@ input {
   <div class="container mt-5 mb-5">
       <h1>Kholosi Dictionary</h1>
       <p>This is live-generated from a Google Sheet that I am probably editing as you view this, so if it breaks (and it probably will) let me know! Also, check out the very <a href="/kholosi/vowels">preliminary analysis of vowels in Kholosi</a>.</p>
-      <p class="text-muted">Note: I tried to be as narrow as possible in IPA transcription. <strong>Tone is probably not phonemic</strong> in Kholosi; it is most likely a realization of stress. Falling pitch in the <em>phonetic IPA</em> is a high-to-low tone. The acute accent in the <em>phonemic transliteration</em> is my guess at where stress is (generally at a falling or high-before-falling tone).</p>
+      <p class="text-muted">CDIAL refers to Sir Ralph Lilley Turner's <a href="https://dsalsrv04.uchicago.edu/dictionaries/soas/"><em>Comparative Dictionary of the Indo-Aryan Languages</em></a>, which is the foundational work on Indo-Aryan comparative lexicography. Most modern work with a diachronic bent refers to this (e.g. Zoller [2006]'s work on Indus Kohistani) so I have too.</p>
       <p>Also see <a href="/kholosi/sentences">sentences</a>.</p>
       <p class="load">Loading...</p>
       <hr>
-      <div class="card-columns"></div>
+    </div>
+      <table class="table table-sm table-bordered" style="width: 90%; margin-left: 5%;">
+        <thead>
+          <tr>
+            <th scope="col">Word</th>
+            <th scope="col">IPA</th>
+            <th scope="col">Gloss</th>
+            <th scope="col">POS</th>
+            <th scope="col">Etymology</th>
+            <th scope="col">Citations</th>
+            <th scope="col" style="width: 200px;">Notes</th>
+          </tr>
+        </thead>
+      </table>
       <script>
           var shortcuts = [
               ['Skt.', 'Sanskrit'],
@@ -151,32 +164,26 @@ input {
           d3.csv("https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk/export?gid=0&format=csv&id=1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk").then(function(data) {
               d3.select(".load").text(data.length + " lemmata.")
               console.log(data)
-              var add = d3.select(".card-columns")
+              var add = d3.select("table")
               for (var i = 0; i < data.length; i++) {
                     var d = data[i]
                     shortcuts.forEach(e => {
                         d.Etymology = d.Etymology.replace(e[0], `<abbr title="${e[1]}">${e[0]}</abbr>`)
                         d.Cognates = d.Cognates.replace(e[0], `<abbr title="${e[1]}">${e[0]}</abbr>`)
                     })
-                    var card = add.append("div")
-                        .attr("class", "card")
-                        .append("div")
-                        .attr("class", "card-body")
+                    var card = add.append("tr")
 
-                    card.append("h4")
-                        .attr("class", "card-title")
+                    card.append("td")
                         .style("font-weight", "bold")
-                        .text(d.Transcription)
-                    card.append("p")
-                        .attr("class", "card-text")
-                        .html(`[${d['Phonetic IPA'].replace(', ', '], [')}]<br>
-                        <em>${d['Part of Speech']} ${d.Form ? "(" + d.Form + ")" : ""}</em><br>"${d.Meaning}"<br>
-                        <span class="text-muted small"><em>Etymology</em>: ${d.Etymology ? d.Etymology : ""}${d.Cognates ? ": cf. " + d.Cognates : ""}<br>
-                        <em>References</em>: ${d.Citations ? d.Citations : ""}<br>
-                        <em>Notes</em>: ${d.Notes ? d.Notes : ""}</span>`)
+                        .html(d.Transcription)
+                    card.append("td").html(d['Phonetic IPA'])
+                    card.append("td").html(d['Meaning'])
+                    card.append("td").html(d['Part of Speech'])
+                    card.append("td").html(d['Etymology'] + (d.Cognates ? "<br>cf. " + d.Cognates : ""))
+                    card.append("td").html(d['Citation'])
+                    card.append("td").html(`<small>${d['Notes']}</small>`)
               }
           })
       </script>
-  </div>
 </body>
 </html>
