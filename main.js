@@ -27,6 +27,19 @@ var y = d3.scaleLinear()
 svg.append("g")
     .attr("transform", `translate(${width}, 0)`)
     .call(d3.axisRight(y));
+svg.append("text")
+    .attr("text-anchor", "start")
+    .attr("x", 0)
+    .attr("y", 20)
+    .text("F2 (Hz)");
+svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "start")
+    .attr("y", width - 20)
+    .attr("x", -height)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("F1 (Hz)");
 
 var t = d3.transition()
     .duration(750)
@@ -108,32 +121,32 @@ d3.tsv("data.txt").then(function(data) {
         // if (vowel != '_a_' && vowel != '_o_') return
         function mouseover() {
             var last = null
+            d3.selectAll("circle").style("opacity", 0.1)
+            d3.selectAll("line").style("opacity", 0.1)
             elem.data.forEach((d, i) => {
                 g.append("circle")
                     .attr("class", "trace data-" + word)
                     .attr("data-time", d.Time_s - elem.data[0].Time_s)
                     .attr("cx", x(d.F2_Hz))
-                    .attr("cy", y(d.F1_Hz))
-                    .attr("r", 3)
+                    .attr("cy", y(d.F1_Hz)).transition().duration(250)
+                    .attr("r", 2)
                     .attr("fill", stringToColour(vowel))
-                    .attr("opacity", 0.1)
                 if (i != 0) {
                     g.append("line")
                         .attr("class", "trace data-" + word)
                         .attr("data-time", d.Time_s - elem.data[0].Time_s)
                         .attr("x1", x(last.F2_Hz))
                         .attr("y1", y(last.F1_Hz))
+                        .attr("x2", x(last.F2_Hz))
+                        .attr("y2", y(last.F1_Hz)).transition().duration(1000)
                         .attr("x2", x(d.F2_Hz))
                         .attr("y2", y(d.F1_Hz))
-                        .attr("stroke-width", 0.5)
+                        .attr("stroke-width", 1)
                         .attr("stroke", stringToColour(vowel))
-                        .attr("opacity", 0.1)
                 }
                 last = d
             })
-            d3.select("h1").html(style + ' (' + Math.round(len * 1000) + ' ms)')
-            d3.selectAll("circle").style("opacity", 0.1)
-            d3.selectAll("line").style("opacity", 0.1)
+            d3.select("h1").html('/' + style + '/ (' + Math.round(len * 1000) + ' ms)')
             d3.selectAll(".data-" + word).style("opacity", 1)
             var margin = {top: 10, right: 10, bottom: 50, left: 50},
                 width = 260 - margin.left - margin.right,
@@ -185,6 +198,23 @@ d3.tsv("data.txt").then(function(data) {
                     .attr("cy", y2(d.F4_Hz))
                     .attr("r", 1.5)
                     .style("fill", stringToColour("F4"))})
+                svg2.append("text")
+                    .attr("text-anchor", "center")
+                    .attr("x", height / 2)
+                    .attr("y", width - 15)
+                    .text("Time (s)")
+                    .style("font-size", "0.6em")
+                    .style("fill", "white")
+                svg2.append("text")
+                    .attr("class", "y label")
+                    .attr("text-anchor", "center")
+                    .attr("y", -50)
+                    .attr("x", -width / 2)
+                    .attr("dy", ".75em")
+                    .attr("transform", "rotate(-90)")
+                    .text("Frequency (Hz)")
+                    .style("font-size", "0.6em")
+                    .style("fill", "white")
         }
         function mouseout() {
             d3.select("div")
