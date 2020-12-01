@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="HandheldFriendly" content="true" />
+<title>Kholosi Dictionary</title>
+<script src="https://d3js.org/d3.v5.js"></script>
+<script src="https://unpkg.com/topojson@3"></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400italic,600italic,700italic,200,300,400,600,700,900">
+<!--CSS-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--JS-->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/versor"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-52207113-1"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="//unpkg.com/leipzig/dist/leipzig.min.css">
+
+<!-- JavaScript -->
+<script src="//unpkg.com/leipzig/dist/leipzig.min.js"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'UA-52207113-1');
+</script>
+
+<!-- CSS -->
+<style>
+ 
+body, h1, h2, h3, p {
+  margin: 0;
+  padding: 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 1em;
+  color: #333;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+#content {
+  margin: 5px;
+  padding: 20px;
+  width: 805px;
+  border: 1px solid #ccc;
+}
+
+#map {
+  margin: 0px 0px 0px 0px;
+  padding: 0px;
+}
+
+h1, h2 {
+  line-height: 1em;
+  font-size: 1.75em;
+  font-weight: 900;
+  color: #000;
+}
+
+h2.date {
+  margin: 10px 0px 0px 0px;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.25em;
+  font-weight: 900;
+}
+
+.card {
+  line-height: 110%;
+}
+
+.counties {
+  position: absolute;
+}
+
+.label {
+  font-variant: small-caps;
+}
+
+
+.states {
+  fill: none;
+  stroke: black;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+}
+
+input {
+  display: block;
+  width: 200px;
+  margin: 10px 0px 0px 0px;
+}
+
+#legend text {
+  font-size: 0.9em;
+  color: #333;
+  font-weight: 400;
+}
+
+.tooltip {
+  position: absolute;
+}
+
+.tooltip p {
+  margin: 0;
+  padding: 0;
+}
+
+.tooltip table {
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+}
+
+.wide {
+  width: 140px;
+}
+
+.title {
+  position: absolute;
+}
+</style>
+</head>
+<body>
+    <div class="container mt-5 mb-5">
+        <h1>Phonology</h1>
+        <h3>Vowels</h3>
+        <div class="row">
+            <div class="col-8">
+                <p>Kholosi appears to have a six vowel system judging from extensive recording and formant graphing (which you can see at <a href="vowels.html">this link</a>), but there may be some allophony at play. Some of the interesting allophones were:
+                    <ul>
+                        <li><strong>[o̞]</strong>: This is the big cluster of dots below the the smaller group of true [o]s in the graph. These appear to be conditioned by a sort of vowel harmony, since they occur in words with repeating /o/s as syllable nuclei.</li>
+                        <li><strong>[e]</strong>: In syllables with a coda that is a sonorant or no code, /ɛ/ is realised as [e] and usually lengthened.</li>
+                    </ul>
+                </p>
+            </div>
+            <div class="col-4">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Front</th>
+                            <th>Back</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <th>Close</th>
+                        <td>i /i/</td>
+                        <td>u /u/</td>
+                    </tr>
+                    <tr>
+                        <th>Mid</th>
+                        <td>e /ɛ/</td>
+                        <td>o /o/</td>
+                    </tr>
+                    <tr>
+                        <th>Open</th>
+                        <td>a /a/</td>
+                        <td>ô /ɔ/</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <h3>Consonants</h3>
+        <div class="row">
+            <div class="col-6">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Bilabial</th>
+                            <th>Labiodental</th>
+                            <th>Alveolar</th>
+                            <th>Postalveolar</th>
+                            <th>Palatal</th>
+                            <th>Velar</th>
+                            <th>Glottal</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <th>Stop</th>
+                        <td>p /p/<br>pʰ /pʰ/<br>b /b/</td>
+                        <td></td>
+                        <td>t /t/<br>tʰ /tʰ/<br>d /d/</td>
+                        <td></td>
+                        <td></td>
+                        <td>k /k/<br><br>g /g/</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Affricate</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>c /t͡ʃ/<br>cʰ /t͡ʃʰ/<br>j /d͡ʒ/</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Fricative</th>
+                        <td></td>
+                        <td>f /f/</td>
+                        <td>s /s/<br>z /z/</td>
+                        <td>š /ʃ/</td>
+                        <td></td>
+                        <td>x /x/</td>
+                        <td><br>h /ɦ/</td>
+                    </tr>
+                    <tr>
+                        <th>Tap</th>
+                        <td></td>
+                        <td></td>
+                        <td>r /ɾ/</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Approximant</th>
+                        <td></td>
+                        <td>v /ʋ/</td>
+                        <td>l /l/</td>
+                        <td></td>
+                        <td>y /j/</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
