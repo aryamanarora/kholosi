@@ -101,11 +101,13 @@ const locs = {
     "Odia": [21.00, 85.00],
     "Sinhala": [8.00, 81.00],
     "Dameli": [35.30, 71.68],
+    "Konkani": [15.27, 74.21]
 }
 
 const description = {
     "voiced aspirates": "Are voiced aspirated stops (e.g. /bʱ/) present? Do they induce tone?",
-    "tr": "What is the outcome of the Old Indo-Aryan <em>tr</em> cluster? (e.g. <em>putrá</em> 'son' > Hindi <em>pūt</em> but Sindhi <em>puṭru</em>)"
+    "tr": "What is the outcome of the Old Indo-Aryan <em>tr</em> cluster? (e.g. <em>putrá</em> 'son' > Hindi <em>pūt</em> but Sindhi <em>puṭru</em>)",
+    "first person": "What is the etymological source of the first person singular pronoun?"
 }
 
 const data = {
@@ -161,6 +163,34 @@ const data = {
         "Saraiki": ["tr", "Masica (1991)"],
         "Khetrani": ["tr", "Masica (1991)"],
         "Hindi": ["t"],
+    },
+    "first person": {
+        "Hindi": ["Skt. ma-", "mɛ̃"],
+        "Punjabi": ["Skt. ma-", "mɛ̃"],
+        "Saraiki": ["Skt. ma-", "mɛ̃"],
+        "Shina": ["Skt. ma-", "mə"],
+        "Nepali": ["Skt. ma-", "ma"],
+        "Palula": ["Skt. ma-", "ma"],
+        "Assamese": ["Skt. ma-", "mui"],
+        "Marathi": ["Skt. ma-", "mī"],
+        "Odia": ["Skt. ma-", "mū̃"],
+        "Gujarati": ["Skt. ahám", "hũ"],
+        "Marwari": ["Skt. ahám", "hũ"],
+        "Sindhi": ["Skt. ahám", "āū̃"],
+        "Siroli": ["Skt. ma-", "mā̃"],
+        "Sauji": ["Skt. ma-", "ma"],
+        "Thari": ["Skt. ahám", "hū̃"],
+        "Siraji": ["Skt. ahám", "ɑ̃ːw"],
+        "Lasi": ["Skt. ahám", "ā̃"],
+        "Dameli": ["Skt. ahám", "ay"],
+        "Khetrani": ["Skt. ahám", "ā̃"],
+        "Lari": ["Skt. ma-", "mū̃"],
+        "Konkani": ["Skt. ahám", "hā̃v"],
+        "Bengali": ["Skt. asmé", "āmi"],
+        "Kashmiri": ["Skt. vayám", "bɨ"],
+        "Kholosi": ["Skt. ma-", "môy"],
+        "Kachchi": ["Skt. ahám", "au"],
+        "Sinhala": ["Skt. ma-", "mama"],
     }
 }
 
