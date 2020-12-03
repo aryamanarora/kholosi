@@ -7,7 +7,7 @@ var g = svg.append("g")
 
 var projection = d3.geoEqualEarth()
     .scale(1000)
-    .center([70, 30])
+    .center([60, 20])
     .translate([width / 2, height / 2])
 
 var path = d3.geoPath()
@@ -101,7 +101,16 @@ const locs = {
     "Odia": [21.00, 85.00],
     "Sinhala": [8.00, 81.00],
     "Dameli": [35.30, 71.68],
-    "Konkani": [15.27, 74.21]
+    "Konkani": [15.27, 74.21],
+    "Bhojpuri": [26.46, 84.82],
+    "Maithili": [26.38, 86.22],
+    "Angika": [26.00, 85.53],
+    "Braj": [26.48, 78.08],
+    "Haryanvi": [29.02, 76.04],
+    "Kannauji": [27.11, 79.29],
+    "Bundeli": [24.90, 78.95],
+    "Awadhi": [27.59, 82.47],
+    "Chakma": [23.00, 92.34],
 }
 
 const description = {
@@ -112,7 +121,7 @@ const description = {
 
 const data = {
     "voiced aspirates": {
-        "Kholosi": ["no + ?"],
+        "Kholosi": ["no"],
         "Sindhi": ["yes"],
         "Punjabi": ["no + tone"],
         "Saraiki": ["yes"],
@@ -150,11 +159,21 @@ const data = {
         "Marwari": ["yes"],
         "Bengali": ["yes"],
         "Assamese": ["yes"],
-        "Sylheti": ["no"],
+        "Sylheti": ["no + tone"],
         "Odia": ["yes"],
         "Sinhala": ["no"],
         "Marathi": ["yes"],
-        "Dameli": ["no", "Perder, Emil (2013)"]
+        "Dameli": ["no", "Perder, Emil (2013)"],
+        "Konkani": ["yes"],
+        "Bhojpuri": ["yes"],
+        "Maithili": ["yes"],
+        "Angika": ["yes"],
+        "Braj": ["yes"],
+        "Haryanvi": ["yes"],
+        "Kannauji": ["yes"],
+        "Bundeli": ["yes"],
+        "Awadhi": ["yes"],
+        "Chakma": ["yes + ?", "Huziwara, K. (2003)"],
     },
     "tr": {
         "Kholosi": ["tVr"],
@@ -187,6 +206,7 @@ const data = {
         "Lari": ["Skt. ma-", "mū̃"],
         "Konkani": ["Skt. ahám", "hā̃v"],
         "Bengali": ["Skt. asmé", "āmi"],
+        "Sylheti": ["Skt. asmé", "āmi"],
         "Kashmiri": ["Skt. vayám", "bɨ"],
         "Kholosi": ["Skt. ma-", "môy"],
         "Kachchi": ["Skt. ahám", "au"],
