@@ -111,12 +111,25 @@ const locs = {
     "Bundeli": [24.90, 78.95],
     "Awadhi": [27.59, 82.47],
     "Chakma": [23.00, 92.34],
+    "Southeast Pashayi": [34.43, 70.30],
+    "Tirahi": [34.18, 69.59],
+    "Torwali": [35.31, 72.53],
+    "Kalasha": [35.64, 71.67],
+    "Indus Kohistani": [35.34, 73.02],
+    "Khowar": [36.00, 72.00],
+    "Gojri": [33.70, 75.11],
+    "Chinali": [32.55, 76.96],
+    "Chambeali": [32.55, 76.18],
+    "Gaddi": [32.36, 76.57],
+    "Bilaspuri": [31.38, 76.67],
+    "Mandeali": [31.54, 77.04],
 }
 
 const description = {
     "voiced aspirates": "Are voiced aspirated stops (e.g. /bʱ/) present? Do they induce tone?",
     "tr": "What is the outcome of the Old Indo-Aryan <em>tr</em> cluster? (e.g. <em>putrá</em> 'son' > Hindi <em>pūt</em> but Sindhi <em>puṭru</em>)",
-    "first person": "What is the etymological source of the first person singular pronoun?"
+    "first person": "What is the etymological source of the first person singular pronoun?",
+    "warm": "What is the etymological source of the word for 'warm'?"
 }
 
 const data = {
@@ -174,6 +187,14 @@ const data = {
         "Bundeli": ["yes"],
         "Awadhi": ["yes"],
         "Chakma": ["yes + ?", "Huziwara, K. (2003)"],
+        "Southeast Pashayi": ["no + tone", "Lamuwal, A. E. M. and Baker, A. (2013); Bashir, E. (2003)"],
+        "Tirahi": ["no", "Grierson, G. (1925)"],
+        "Torwali": ["yes", "Bashir, E. (2003)"],
+        "Kalasha": ["yes", "Bashir, E. (2003)"],
+        "Indus Kohistani": ["yes", "Bashir, E. (2003)"],
+        "Khowar": ["no + tone", "Bashir, E. (2003)"],
+        "Gojri": ["no + tone", "Losey (2002)"],
+        "Bhadrawahi": ["yes"],
     },
     "tr": {
         "Kholosi": ["tVr"],
@@ -184,33 +205,58 @@ const data = {
         "Hindi": ["t"],
     },
     "first person": {
-        "Hindi": ["Skt. ma-", "mɛ̃"],
-        "Punjabi": ["Skt. ma-", "mɛ̃"],
-        "Saraiki": ["Skt. ma-", "mɛ̃"],
-        "Shina": ["Skt. ma-", "mə"],
-        "Nepali": ["Skt. ma-", "ma"],
-        "Palula": ["Skt. ma-", "ma"],
-        "Assamese": ["Skt. ma-", "mui"],
-        "Marathi": ["Skt. ma-", "mī"],
-        "Odia": ["Skt. ma-", "mū̃"],
-        "Gujarati": ["Skt. ahám", "hũ"],
-        "Marwari": ["Skt. ahám", "hũ"],
-        "Sindhi": ["Skt. ahám", "āū̃"],
-        "Siroli": ["Skt. ma-", "mā̃"],
-        "Sauji": ["Skt. ma-", "ma"],
-        "Thari": ["Skt. ahám", "hū̃"],
-        "Siraji": ["Skt. ahám", "ɑ̃ːw"],
-        "Lasi": ["Skt. ahám", "ā̃"],
-        "Dameli": ["Skt. ahám", "ay"],
-        "Khetrani": ["Skt. ahám", "ā̃"],
-        "Lari": ["Skt. ma-", "mū̃"],
-        "Konkani": ["Skt. ahám", "hā̃v"],
-        "Bengali": ["Skt. asmé", "āmi"],
-        "Sylheti": ["Skt. asmé", "āmi"],
-        "Kashmiri": ["Skt. vayám", "bɨ"],
-        "Kholosi": ["Skt. ma-", "môy"],
-        "Kachchi": ["Skt. ahám", "au"],
-        "Sinhala": ["Skt. ma-", "mama"],
+        "Hindi": ["Skt. ma-", "", "mɛ̃"],
+        "Punjabi": ["Skt. ma-", "", "mɛ̃"],
+        "Saraiki": ["Skt. ma-", "", "mɛ̃"],
+        "Shina": ["Skt. ma-", "", "mə"],
+        "Nepali": ["Skt. ma-", "", "ma"],
+        "Palula": ["Skt. ma-", "", "ma"],
+        "Assamese": ["Skt. ma-", "", "mui"],
+        "Marathi": ["Skt. ma-", "", "mī"],
+        "Odia": ["Skt. ma-", "", "mū̃"],
+        "Gujarati": ["Skt. ahám", "", "hũ"],
+        "Marwari": ["Skt. ahám", "", "hũ"],
+        "Sindhi": ["Skt. ahám", "", "āū̃"],
+        "Siroli": ["Skt. ma-", "", "mā̃"],
+        "Sauji": ["Skt. ma-", "", "ma"],
+        "Thari": ["Skt. ahám", "", "hū̃"],
+        "Siraji": ["Skt. ahám", "", "ɑ̃ːw"],
+        "Lasi": ["Skt. ahám", "", "ā̃"],
+        "Dameli": ["Skt. ahám", "", "ay"],
+        "Khetrani": ["Skt. ahám", "", "ā̃"],
+        "Lari": ["Skt. ma-", "", "mū̃"],
+        "Konkani": ["Skt. ahám", "", "hā̃v"],
+        "Bengali": ["Skt. asmé", "", "āmi"],
+        "Sylheti": ["Skt. asmé", "", "āmi"],
+        "Kashmiri": ["Skt. vayám", "", "bɨ"],
+        "Kholosi": ["Skt. ma-", "", "môy"],
+        "Kachchi": ["Skt. ahám", "", "au"],
+        "Sinhala": ["Skt. ma-", "", "mama"],
+    },
+    "warm": {
+        "Hindi": ["Persian garm", "", "garam"],
+        "Nepali": ["Sanskrit *nidahana", "", "nyāno"],
+        "Punjabi": ["Persian garm", "", "garam"],
+        "Bhojpuri": ["Persian garm", "", "garam"],
+        "Sindhi": ["OIA *koṣma", "", "koso"],
+        "Kholosi": ["OIA *koṣma", "", "koso"],
+        "Gujarati": ["Persian garm", "", "garam"],
+        "Marathi": ["Persian garm", "", "garam"],
+        "Bengali": ["Persian garm", "", "gôrôm"],
+        "Assamese": ["Persian garm", "", "gorom"],
+        "Odia": ["Persian garm", "", "gôrômô"],
+        "Sinhala": ["Sanskrit uṣṇá", "", "uṇusum"],
+        "Chinali": ["Sanskrit taptá", "", "tātu"],
+        "Chambeali": ["Sanskrit taptá", "", "tatā"],
+        "Gaddi": ["OIA *koṣma", "", "koslā"],
+        "Bilaspuri": ["Sanskrit taptá", "", "tattā"],
+        "Mandeali": ["Sanskrit taptá", "", "tātā"],
+        "Awadhi": ["Sanskrit taptá", "", "tāt"],
+        "Haryanvi": ["Sanskrit taptá", "", "tātā"],
+        "Palula": ["Sanskrit taptá", "", "táatu"],
+        "Saraiki": ["Sanskrit taptá", "", "tattā"],
+        "Konkani": ["Sanskrit uṣṇá", "", "hūn"],
+        "Kashmiri": ["Persian garm", "", "garɨm"]
     }
 }
 
@@ -245,7 +291,7 @@ function load(world) {
 
 function dimension(type) {
     legend.html("")
-    g.selectAll("circle").remove()
+    g.selectAll("text").remove()
     console.log(type)
     info.html(description[type])
     console.log(data[type])
@@ -257,16 +303,18 @@ function dimension(type) {
         if (!(data[type][key][0] in vals)) vals[data[type][key][0]] = 0;
         vals[data[type][key][0]]++;
         var loc = projection([locs[key][1], locs[key][0]])
-        g.append("circle")
-            .attr("cx", loc[0])
-            .attr("cy", loc[1])
-            .attr("r", 5)
+        g.append("text")
+            .attr("x", loc[0])
+            .attr("y", loc[1])
+            .attr("font-size", 20)
+            .style("opacity", 0.8)
+            .text(data[type][key][2] || data[type][key][0])
+            .style("font-weight", "bold")
+            .style("font-family", "Arial")
             .attr("data-name", key)
             .attr("fill", function() {
                 return stringToColour(data[type][key][0])
             })
-            .attr("stroke", "black")
-            .attr("stroke-width", 1)
             .on("mouseover", function() {
                 var name = d3.select(this).attr("data-name")
                 tooltip.style("opacity", 1)

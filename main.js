@@ -1,3 +1,11 @@
+function kde(kernel, thresholds, data) {
+    return thresholds.map(t => [t, d3.mean(data, d => kernel(t - d))]);
+}
+
+function epanechnikov(bandwidth) {
+    return x => Math.abs(x /= bandwidth) <= 1 ? 0.75 * (1 - x * x) / bandwidth : 0;
+}
+
 var margin = {top: 50, right: 50, bottom: 50, left: 50}
 var width = window.innerWidth - margin.right - margin.left,
     height = window.innerHeight - margin.top - margin.bottom;
@@ -107,13 +115,25 @@ d3.tsv("data.txt").then(function(data) {
         }
     }
     res.push(cur)
+    f1s = {}
+    f2s = {}
+    lens = {}
     res.forEach((elem, i) => {
         var len = elem.data[elem.data.length - 1].Time_s - elem.data[0].Time_s
         var word = elem.env
+        // if (word[word.length - 1] = '_') return
         var old_word = word
         var style = word.replace(/_(.*?)_/g, '<span style="color: blue">$1</span>')
         var vowel = word.match(/_.*?_/g)[0]
         if (!counts[vowel]) counts[vowel] = 0, sums[vowel] = [0, 0]
+
+        if (!(vowel in f1s)) f1s[vowel] = []
+        if (!(vowel in f2s)) f2s[vowel] = []
+        if (!(vowel in lens)) lens[vowel] = []
+        f1s[vowel].push(+elem.data[Math.floor(elem.data.length / 2)].F1_Hz)
+        f2s[vowel].push(+elem.data[Math.floor(elem.data.length / 2)].F2_Hz)
+        lens[vowel].push(Math.round(len * 1000))
+
         counts[vowel]++
         sums[vowel][0] += +elem.data[Math.floor(elem.data.length / 2)].F1_Hz
         sums[vowel][1] += +elem.data[Math.floor(elem.data.length / 2)].F2_Hz
@@ -123,6 +143,7 @@ d3.tsv("data.txt").then(function(data) {
             var last = null
             d3.selectAll("circle").style("opacity", 0.1)
             d3.selectAll("line").style("opacity", 0.1)
+            d3.selectAll("text").style("opacity", 0.6)
             elem.data.forEach((d, i) => {
                 g.append("circle")
                     .attr("class", "trace data-" + word)
@@ -147,6 +168,8 @@ d3.tsv("data.txt").then(function(data) {
                 last = d
             })
             d3.select("h1").html('/' + style + '/ (' + Math.round(len * 1000) + ' ms)')
+            d3.select("p").html('F1: ' + elem.data[Math.floor(elem.data.length / 2)].F1_Hz + ', F2: ' +
+                elem.data[Math.floor(elem.data.length / 2)].F2_Hz)
             d3.selectAll(".data-" + word).style("opacity", 1)
             var margin = {top: 10, right: 10, bottom: 50, left: 50},
                 width = 260 - margin.left - margin.right,
@@ -223,6 +246,7 @@ d3.tsv("data.txt").then(function(data) {
             d3.selectAll(".graph, .trace")
                 .remove()
             d3.select("h1").html("")
+            d3.select("p").html("")
         }
         if (vowel.length != 3) {
             return
@@ -273,6 +297,15 @@ d3.tsv("data.txt").then(function(data) {
                 .attr("opacity", 0.7)
                 .on("mouseover", mouseover)
                 .on("mouseout", mouseout)
+                // g.append("line")
+                //     .attr("class", "data-" + word)
+                //     .attr("x1", x(elem.data[Math.floor(0)].F2_Hz))
+                //     .attr("y1", y(elem.data[Math.floor(0)].F1_Hz))
+                //     .attr("x2", x(elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
+                //     .attr("y2", y(elem.data[Math.floor(elem.data.length / 2)].F1_Hz))
+                //     .attr("stroke-width", 1)
+                //     .attr("stroke", stringToColour(vowel))
+                //     .attr("opacity", 0.8)
             // g2.append("text")
             //     .html(old_word)
             //     .attr("x", x(elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
@@ -280,6 +313,31 @@ d3.tsv("data.txt").then(function(data) {
             //     .attr("text-anchor", "middle")
         }
     })
+
+    var hist = d3.select("#histogram")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    
+    var x2 = d3.scaleLinear()
+        .domain([0, 400])
+        .range([0, width])
+
+    hist.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x2))
+
+    var y2 = d3.scaleLinear()
+        .range([height, 0])
+        .domain([0, 0.02]);
+    hist.append("g")
+        .call(d3.axisLeft(y2))
+
+    var calc = d3.histogram()
+        .thresholds(d3.range(0, x2.domain()[1] + 1, 20))
+        .domain(x2.domain())
+
     for (const vowel in sums) {
         if (vowel.length != 3) continue
         console.log(sums[vowel], counts[vowel])
@@ -289,5 +347,58 @@ d3.tsv("data.txt").then(function(data) {
             .text("/" + vowel.slice(1, vowel.length - 1) + "/")
             .attr("font-size", 30)
             .style("pointer-events", "none")
+        g2.append("text")
+            .attr("x", x(sums[vowel][1] / counts[vowel]) + 40)
+            .attr("y", y(sums[vowel][0] / counts[vowel]) - 12)
+            .text('F1: ' + Math.round(d3.mean(f1s[vowel]) / 10) * 10 + '±' + Math.round(d3.deviation(f1s[vowel]) / 10) * 10 + ' Hz')
+            .attr("font-size", 13)
+            .style("pointer-events", "none")
+        g2.append("text")
+            .attr("x", x(sums[vowel][1] / counts[vowel]) + 40)
+            .attr("y", y(sums[vowel][0] / counts[vowel]))
+            .text('F2: ' + Math.round(d3.mean(f2s[vowel]) / 10) * 10 + '±' + Math.round(d3.deviation(f2s[vowel]) / 10) * 10 + ' Hz')
+            .attr("font-size", 13)
+            .style("pointer-events", "none")
+        g2.append("text")
+            .attr("x", x(sums[vowel][1] / counts[vowel]) + 40)
+            .attr("y", y(sums[vowel][0] / counts[vowel]) + 12)
+            .text('Len: ' + Math.round(d3.mean(lens[vowel])) + '±' + Math.round(d3.deviation(lens[vowel])) + ' ms')
+            .attr("font-size", 13)
+            .style("pointer-events", "none")
+        g2.append("text")
+            .attr("x", x(sums[vowel][1] / counts[vowel]) + 40)
+            .attr("y", y(sums[vowel][0] / counts[vowel]) + 24)
+            .text('Count: ' + counts[vowel])
+            .attr("font-size", 13)
+            .style("pointer-events", "none")
+
+        console.log(lens[vowel])
+        bins = calc(lens[vowel])
+        console.log(bins)
+
+        // if (vowel == '_ɔ_') hist.append("g")
+        //     .attr("fill", stringToColour(vowel))
+        //     .selectAll("rect")
+        //     .data(bins)
+        //     .join("rect")
+        //         .attr("x", d => x2(d.x0) + 1)
+        //         .attr("y", d => y2(d.length / lens[vowel].length))
+        //         .attr("width", d => x2(d.x1) - x2(d.x0) - 1)
+        //         .attr("height", d => y2(0) - y2(d.length / lens[vowel].length));
+
+        density = kde(epanechnikov(20), d3.range(0, x2.domain()[1] + 1, 10), lens[vowel])
+        console.log(density)
+
+        hist.append("path")
+            .datum(density)
+            .attr("fill", stringToColour(vowel))
+            .attr("stroke", stringToColour(vowel))
+            .attr("fill-opacity", 0.2)
+            .attr("stroke-width", 5)
+            .attr("stroke-linejoin", "round")
+            .attr("d", d3.line()
+                .curve(d3.curveBasis)
+                .x(d => x2(d[0]))
+                .y(d => y2(d[1])))
     }
 })
