@@ -1,0 +1,316 @@
+Time_s	F0_Hz	environment	type
+Time_s	F0_Hz	jangal	a
+0	110	0.14
+1	105
+1	119	0.24
+2	93
+Time_s	F0_Hz	dôno	a
+0	114	0.23
+1	104
+1	114	0.23
+2	98
+Time_s	F0_Hz	dôno	a
+0	108	0.19
+1	108
+1	118	0.24
+2	100
+Time_s	F0_Hz	derax	b
+0	120	0.09
+1	109
+1	116	0.18
+2	100
+Time_s	F0_Hz	mevo	a
+0	120	0.20
+1	118
+1	132	0.18
+2	101
+Time_s	F0_Hz	xôti	a
+0	128	0.13
+1	127
+1	158	0.15
+2	115
+Time_s	F0_Hz	xôti	a
+0	128	0.17
+1	113
+1	135	0.15
+2	102
+Time_s	F0_Hz	petak	a
+0	134	0.05
+1	127
+1	146	0.15
+2	120
+Time_s	F0_Hz	petak	a
+0	118	0.04
+1	116
+1	127	0.19
+2	99
+Time_s	F0_Hz	kerem	b
+0	146	0.07	
+1	140
+1	134	0.10
+2	109
+Time_s	F0_Hz	tôffo	a
+0	119	
+1	121
+1	136
+2	96
+Time_s	F0_Hz	nimur	a
+0	123	
+1	125
+1	138
+2	102
+Time_s	F0_Hz	hulu	a
+0	119	
+1	112
+1	123
+2	103
+Time_s	F0_Hz	xaru	a
+0	112	
+1	114
+1	121
+2	104
+Time_s	F0_Hz	gezar	a
+0	129	
+1	117
+1	132
+2	107
+Time_s	F0_Hz	ôlu	a
+0	131	
+1	132
+1	145
+2	106
+Time_s	F0_Hz	zorat	a
+0	120
+1	114
+1	124
+2	97
+Time_s	F0_Hz	sarbôz	a
+0	120
+1	112
+1	135
+2	101
+Time_s	F0_Hz	tula	a
+0	130
+1	121
+1	134
+2	110
+Time_s	F0_Hz	pašem	b
+0	132
+1	127
+1	112
+2	105
+Time_s	F0_Hz	pašem	b
+0	145
+1	127
+1	118
+2	105
+Time_s	F0_Hz	royen	a
+0	130
+1	129
+1	148
+2	114
+Time_s	F0_Hz	šekken	a
+0	130
+1	119
+1	142
+2	107
+Time_s	F0_Hz	šekken	a
+0	107
+1	103
+1	120
+2	94
+Time_s	F0_Hz	šekken	a
+0	112
+1	100
+1	117
+2	98
+Time_s	F0_Hz	maxi	c
+0	107
+1	108
+1	135
+2	110
+Time_s	F0_Hz	maxi	c
+0	100
+1	98
+1	125
+2	99
+Time_s	F0_Hz	maxi	c
+0	99
+1	99
+1	124
+2	93
+Time_s	F0_Hz	jolo	a
+0	132
+1	124
+1	143
+2	108
+Time_s	F0_Hz	jolo	a
+0	122
+1	106
+1	126
+2	98
+Time_s	F0_Hz	matti	c
+0	119
+1	112
+1	141
+2	107
+Time_s	F0_Hz	matti	c
+0	100
+1	101
+1	133
+2	106
+Time_s	F0_Hz	ônen	a
+0	133
+1	124
+1	130
+2	105
+Time_s	F0_Hz	ônen	a
+0	118
+1	107
+1	117
+2	96
+Time_s	F0_Hz	konjen	a
+0	119
+1	121
+1	137
+2	102
+Time_s	F0_Hz	tʰiyen	a
+0	140
+1	137
+1	148
+2	106
+Time_s	F0_Hz	xoli	c
+0	100
+1	93
+1	116
+2	97
+Time_s	F0_Hz	rošan	c
+0	94
+1	88
+1	99
+2	89
+Time_s	F0_Hz	vazo	a
+0	119	0.13
+1	110
+1	121	0.29
+2	101
+Time_s	F0_Hz	vazo	a
+0	106	0.12
+1	107
+1	118	0.37
+2	101
+Time_s	F0_Hz	kalto	c
+0	111	0.12
+1	100
+1	134	0.30
+2	98
+Time_s	F0_Hz	kalto	c
+0	110	0.12
+1	103
+1	126	0.30
+2	99
+Time_s	F0_Hz	kalto	c
+0	108	0.12
+1	106
+1	120	0.27
+2	107
+Time_s	F0_Hz	noko	a
+0	121	0.28
+1	119
+1	144	0.18
+2	105
+Time_s	F0_Hz	noko	a
+0	123	0.30
+1	110
+1	138	0.20
+2	101
+Time_s	F0_Hz	tʰôṛgo	a
+0	119	0.28
+1	108
+1	131	0.18
+2	101
+Time_s	F0_Hz	tʰôṛgo	a
+0	116	0.30
+1	107
+1	124	0.23
+2	100
+Time_s	F0_Hz	tʰôllo	a
+0	115	0.10
+1	114
+1	123	0.15
+2	98
+Time_s	F0_Hz	sino	a
+0	123	0.29
+1	116
+1	127	0.17
+2	93
+Time_s	F0_Hz	domôx	a
+0	134	0.10
+1	131
+1	147	0.20
+2	114
+Time_s	F0_Hz	domôx	a
+0	125	0.11
+1	125
+1	139	0.28
+2	103
+Time_s	F0_Hz	mato	a
+0	138	0.08
+1	136
+1	168	0.16
+2	104
+Time_s	F0_Hz	mato	a
+0	130	0.10
+1	125
+1	150	0.20
+2	98
+Time_s	F0_Hz	mato	a
+0	129	0.09
+1	129
+1	146	0.19
+2	100
+Time_s	F0_Hz	piško	a
+0	154	0.05
+1	143
+1	184	0.15
+2	115
+Time_s	F0_Hz	piško	a
+0	134	0.04
+1	134
+1	173	0.18
+2	107
+Time_s	F0_Hz	geči	a
+0	143	0.09
+1	132
+1	183	0.16
+2	123
+Time_s	F0_Hz	geči	a
+0	134	0.10
+1	133
+1	160	0.17
+2	110
+Time_s	F0_Hz	tʰazen	a
+0	120	0.25
+1	112
+1	140	0.26
+2	103
+Time_s	F0_Hz	paren	a
+0	124	0.31
+1	101
+1	120	0.35
+2	98
+Time_s	F0_Hz	rayen	a
+0	123	0.12
+1	122
+1	152	0.23
+2	118
+Time_s	F0_Hz	nao	a
+0	124	0.16
+1	123
+1	146	0.18
+2	102
+Time_s	F0_Hz	deryôw	a
+0	127	0.20
+1	112
+1	133	0.44
+2	98

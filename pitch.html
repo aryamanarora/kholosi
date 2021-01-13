@@ -55,9 +55,14 @@
             <h1 class="environment"></h1>
             <p class="info"></p>
         </div>
-        <svg id="map"></svg>
-        <svg id="histogram"></svg>
-        <svg id="graph"></svg>
-        <script src="main.js"></script>
+        <svg id="map">
+            <defs>
+                <marker id="arrowhead" markerWidth="5" markerHeight="7.5" 
+                refX="0" refY="1.75" orient="auto" >
+                    <polygon points="0 0, 5 1.75, 0 3.5" fill="context-stroke"/>
+                </marker>
+            </defs>
+        </svg>
+        <script src="pitch.js"></script>
     </body>
 </html>

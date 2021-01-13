@@ -6,6 +6,28 @@ function epanechnikov(bandwidth) {
     return x => Math.abs(x /= bandwidth) <= 1 ? 0.75 * (1 - x * x) / bandwidth : 0;
 }
 
+function leastSquares(xSeries, ySeries) {
+    var reduceSumFunc = function(prev, cur) { return prev + cur; };
+    
+    var xBar = xSeries.reduce(reduceSumFunc) * 1.0 / xSeries.length;
+    var yBar = ySeries.reduce(reduceSumFunc) * 1.0 / ySeries.length;
+
+    var ssXX = xSeries.map(function(d) { return Math.pow(d - xBar, 2); })
+        .reduce(reduceSumFunc);
+    
+    var ssYY = ySeries.map(function(d) { return Math.pow(d - yBar, 2); })
+        .reduce(reduceSumFunc);
+        
+    var ssXY = xSeries.map(function(d, i) { return (d - xBar) * (ySeries[i] - yBar); })
+        .reduce(reduceSumFunc);
+        
+    var slope = ssXY / ssXX;
+    var intercept = yBar - (xBar * slope);
+    var rSquare = Math.pow(ssXY, 2) / (ssXX * ssYY);
+    
+    return [slope, intercept, rSquare];
+}
+
 var margin = {top: 50, right: 50, bottom: 50, left: 50}
 var width = window.innerWidth - margin.right - margin.left,
     height = window.innerHeight - margin.top - margin.bottom;
@@ -21,7 +43,7 @@ var svg = container.append("svg")
         "translate(" + margin.left + "," + margin.top + ")")
 
 var x = d3.scaleLinear()
-    .domain([2800, 400])
+    .domain([3000, 400])
     .range([0, width]);
 // var x = d3.scaleLinear()
 //     .domain([3600, 2000])
@@ -30,7 +52,7 @@ svg.append("g")
     .call(d3.axisTop(x));
 
 var y = d3.scaleLinear()
-    .domain([1000, 250])
+    .domain([1100, 250])
     .range([height, 0]);
 svg.append("g")
     .attr("transform", `translate(${width}, 0)`)
@@ -297,15 +319,15 @@ d3.tsv("data.txt").then(function(data) {
                 .attr("opacity", 0.7)
                 .on("mouseover", mouseover)
                 .on("mouseout", mouseout)
-                // g.append("line")
-                //     .attr("class", "data-" + word)
-                //     .attr("x1", x(elem.data[Math.floor(0)].F2_Hz))
-                //     .attr("y1", y(elem.data[Math.floor(0)].F1_Hz))
-                //     .attr("x2", x(elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
-                //     .attr("y2", y(elem.data[Math.floor(elem.data.length / 2)].F1_Hz))
-                //     .attr("stroke-width", 1)
-                //     .attr("stroke", stringToColour(vowel))
-                //     .attr("opacity", 0.8)
+            // g.append("line")
+            //     .attr("class", "data-" + word)
+            //     .attr("x1", x(elem.data[Math.floor((elem.data.length / 10))].F2_Hz))
+            //     .attr("y1", y(elem.data[Math.floor((elem.data.length / 10))].F1_Hz))
+            //     .attr("x2", x(elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
+            //     .attr("y2", y(elem.data[Math.floor(elem.data.length / 2)].F1_Hz))
+            //     .attr("stroke-width", 1)
+            //     .attr("stroke", stringToColour(vowel))
+            //     .attr("opacity", 0.8)
             // g2.append("text")
             //     .html(old_word)
             //     .attr("x", x(elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
@@ -340,7 +362,7 @@ d3.tsv("data.txt").then(function(data) {
 
     for (const vowel in sums) {
         if (vowel.length != 3) continue
-        console.log(sums[vowel], counts[vowel])
+        // console.log(sums[vowel], counts[vowel])
         g2.append("text")
             .attr("x", x(sums[vowel][1] / counts[vowel]))
             .attr("y", y(sums[vowel][0] / counts[vowel]))
@@ -372,9 +394,9 @@ d3.tsv("data.txt").then(function(data) {
             .attr("font-size", 13)
             .style("pointer-events", "none")
 
-        console.log(lens[vowel])
+        // console.log(lens[vowel])
         bins = calc(lens[vowel])
-        console.log(bins)
+        // console.log(bins)
 
         // if (vowel == '_ɔ_') hist.append("g")
         //     .attr("fill", stringToColour(vowel))
@@ -387,7 +409,7 @@ d3.tsv("data.txt").then(function(data) {
         //         .attr("height", d => y2(0) - y2(d.length / lens[vowel].length));
 
         density = kde(epanechnikov(20), d3.range(0, x2.domain()[1] + 1, 10), lens[vowel])
-        console.log(density)
+        // console.log(density)
 
         hist.append("path")
             .datum(density)
@@ -401,4 +423,44 @@ d3.tsv("data.txt").then(function(data) {
                 .x(d => x2(d[0]))
                 .y(d => y2(d[1])))
     }
+
+
+
+    var hist = d3.select("#graph")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    
+    var x2 = d3.scaleLinear()
+        .domain([0, 3000])
+        .range([0, width])
+
+    hist.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x2))
+
+    var y2 = d3.scaleLinear()
+        .range([height, 0])
+        .domain([0, 3000]);
+    hist.append("g")
+        .call(d3.axisLeft(y2))
+
+    var calc = d3.histogram()
+        .thresholds(d3.range(0, x2.domain()[1] + 1, 20))
+        .domain(x2.domain())
+
+    var locus = hist.append("g")
+    res.forEach((elem, i) => {
+        var c = ""
+        if (elem.env.match(/(.ʰ?)?_.*?_/g)[0][0] == 't' || elem.env.match(/(.ʰ?)?_.*?_/g)[0][0] == 'd') c = 'alveolar'
+        if (elem.env.match(/(.ʰ?)?_.*?_/g)[0][0] == 'k' || elem.env.match(/(.ʰ?)?_.*?_/g)[0][0] == 'g') c = 'velar'
+        if (elem.env.match(/(.ʰ?)?_.*?_/g)[0][0] == 'p' || elem.env.match(/(.ʰ?)?_.*?_/g)[0][0] == 'b') c = 'labial'
+        locus.append("circle")
+            .attr("cx", x2(+elem.data[Math.floor(elem.data.length / 2)].F2_Hz))
+            .attr("cy", y2(+elem.data[Math.floor(elem.data.length / 100)].F2_Hz))
+            .attr("fill", (c && stringToColour(c)) || "grey")
+            .attr("r", 5)
+            .attr("fill-opacity", 0.8)
+    })
 })
