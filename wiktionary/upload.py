@@ -64,25 +64,46 @@ with open("lexicon.csv") as fin:
         word.set_etymology(etymology)
 
         # PRONUNCIATION
-        word.add_pronunciation('/' + data["Phonetic IPA"] + '/', 'IPA') # this is actually phonemic but whatever
+        word.add_pronunciation('/' + data["Phonetic IPA"] + '/', 'ipa') # this is actually phonemic but whatever
         for match in re.findall(r"(\[.*?\])", data["IPA 2"]): # THIS IS PHONETIC!
-            word.add_pronunciation(match, 'IPA')
+            word.add_pronunciation(match, 'ipa')
         
         # DEFINITIONS
+        #
+        # The main issue here is linking the definition properly.
+        # On Wiktionary, it is standard practice (but not required!) to link
+        # to the English words in the definitions for a non-English language.
+        # I automate this using a lemmatiser for English (Stanford stanza's model)
+        # which requires some string manipulation.
         for x in data["Meaning"].split(";"):
             for definition in x.split(","):
-                w = nlp(definition.strip()).sentences[0].words # ah yes computational linguistics (just lemmatising for making links)
-                word.add_definition(
-                    ' '.join([f'[[{word.lemma}|{word.text}]]' for word in w]),
-                    data["Part of Speech"]
-                )
+                definition = definition.strip()
+                w = nlp(definition).sentences[0].words # ah yes computational linguistics (just lemmatising for making links)
+                offset = 0
+                for x in w:
+                    if x.text in '()': continue
+                    print(w)
+                    start, end = x.misc.split('|')
+                    start = int(start.split('=')[1])
+                    end = int(end.split('=')[1])
+                    replace = f'[[{x.lemma}|{x.text}]]' if x.lemma != x.text else f'[[{x.text}]]'
+                    definition = definition[:start + offset] + replace + definition[end + offset:]
+                    offset += len(replace) - len(x.text)
+                word.add_definition(definition, data["Part of Speech"])
 
         # REFERENCES
+        #
+        # I have an etymological reference to the Comparative Dictionary of
+        # the Indo-Aryan Languages for Sanskrit-derived terms in my data.
+        # I parse those out and add a reference to it using Wiktionary's
+        # on-wiki template for CDIAL.
         refs = ['* {{R:inc-kho:Arora}}']
         if 'CDIAL' in data["Etymology"]:
             for number in re.findall(r"\(CDIAL (.*?)\)", data["Etymology"]):
                 refs.append(f"* {{{{R:CDIAL|2={number}}}}}")
         word.set_references('\n'.join(refs))
         words.append(word)
-        
+
+print(len(words))
 export_words(words, 'kholosi.zip')
+upload_formatted_entries(format_entries(words, lang_code, lang_name), lang_name, page_prefix='User:AryamanA/Kholosi/')
