@@ -43,6 +43,7 @@ var info = header.append("p").append("small")
 var legend = header.append("p")
 
 var stringToColour = function(str) {
+    str += 'aad,8129h'
     var hash = 0
     for (var i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash)
@@ -129,7 +130,8 @@ const description = {
     "voiced aspirates": "Are voiced aspirated stops (e.g. /bʱ/) present? Do they induce tone?",
     "tr": "What is the outcome of the Old Indo-Aryan <em>tr</em> cluster? (e.g. <em>putrá</em> 'son' > Hindi <em>pūt</em> but Sindhi <em>puṭru</em>)",
     "first person": "What is the etymological source of the first person singular pronoun?",
-    "warm": "What is the etymological source of the word for 'warm'?"
+    "warm": "What is the etymological source of the word for 'warm'?",
+    "stops": "What places of articulation for stops (plosives and affricates) are in the phonemic inventory?"
 }
 
 const data = {
@@ -257,6 +259,21 @@ const data = {
         "Saraiki": ["Sanskrit taptá", "", "tattā"],
         "Konkani": ["Sanskrit uṣṇá", "", "hūn"],
         "Kashmiri": ["Persian garm", "", "garɨm"]
+    },
+    "stops": {
+        "Hindi": ["p, t̪, ʈ, t͡ʃ, k"],
+        "Punjabi": ["p, t̪, ʈ, t͡ʃ, k"],
+        "Dogri": ["p, t̪, ʈ, t͡ʃ, k"],
+        "Sindhi": ["p, t̪, ʈ, t͡ʃ, k"],
+        "Gujarati": ["p, t̪, ʈ, t͡ʃ, k"],
+        "Odia": ["p, t̪, ʈ, t͡ʃ, k"],
+        "Bengali": ["p, t̪, ʈ, t͡ʃ, k"],
+        "Bhojpuri": ["p, t̪, ʈ, t͡ʃ, k"],
+        "Nepali": ["p, t̪, ʈ, t͡s, k"],
+        "Kashmiri": ["p, t̪, ʈ, t͡s, k"],
+        "Marathi": ["p, t̪, ʈ, t͡s, t͡ʃ, k"],
+        "Konkani": ["p, t̪, ʈ, t͡s, t͡ʃ, k"],
+        "Shina": ["p, t̪, ʈ, t͡s, ʈ͡ʂ, t͡ʃ, k"],
     }
 }
 
@@ -291,7 +308,7 @@ function load(world) {
 
 function dimension(type) {
     legend.html("")
-    g.selectAll("text").remove()
+    g.selectAll("circle").remove()
     console.log(type)
     info.html(description[type])
     console.log(data[type])
@@ -303,14 +320,19 @@ function dimension(type) {
         if (!(data[type][key][0] in vals)) vals[data[type][key][0]] = 0;
         vals[data[type][key][0]]++;
         var loc = projection([locs[key][1], locs[key][0]])
-        g.append("text")
-            .attr("x", loc[0])
-            .attr("y", loc[1])
-            .attr("font-size", 20)
-            .style("opacity", 0.8)
-            .text(data[type][key][2] || data[type][key][0])
-            .style("font-weight", "bold")
-            .style("font-family", "Arial")
+        // g.append("text")
+        //     .attr("x", loc[0])
+        //     .attr("y", loc[1])
+        //     .attr("font-size", 20)
+        //     .style("opacity", 0.8)
+        //     .text(data[type][key][2] || data[type][key][0])
+        //     .style("font-weight", "bold")
+        //     .style("font-family", "Arial")
+        g.append("circle")
+            .attr("cx", loc[0])
+            .attr("cy", loc[1])
+            .attr("r", 5)
+            .attr("stroke", "white")
             .attr("data-name", key)
             .attr("fill", function() {
                 return stringToColour(data[type][key][0])
