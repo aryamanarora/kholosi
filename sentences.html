@@ -140,7 +140,7 @@ input {
       <hr>
       <div class="card-columns"></div>
       <script>
-          d3.csv("https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk/export?gid=750016672&format=csv&id=1RXgvuTg8vfpxq_q_e5nL12CQhl-uyp2qQI0DmcjBBCk").then(function(data) {
+          d3.csv("sentences.csv").then(function(data) {
               console.log(data)
               d3.select(".load").text(data.length + " sentences.")
               for (var i = 0; i < data.length; i++) {
